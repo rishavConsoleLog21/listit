@@ -3,11 +3,13 @@ import BackButton from "../components/BackButton";
 import Spinner from "../components/Spinner";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
+import { useSnackbar } from "notistack";
 
 const DeleteBook = () => {
   const [loading, setLoading] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleDeleteBook = () => {
     setLoading(true);
@@ -15,11 +17,13 @@ const DeleteBook = () => {
       .delete(`http://localhost:3000/books/${id}`)
       .then(() => {
         setLoading(false);
+        enqueueSnackbar("Book deleted successfully", { variant: "success" });
         navigate("/");
       })
       .catch((err) => {
         setLoading(false);
-        alert("Error deleting book");
+        //alert("Error deleting book");
+        enqueueSnackbar("Error deleting book", { variant: "error" });
         console.log(err);
       });
   };

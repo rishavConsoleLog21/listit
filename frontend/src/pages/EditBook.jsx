@@ -4,6 +4,7 @@ import Snipper from "../components/Spinner";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
+import { useSnackbar } from "notistack";
 
 const EditBook = () => {
   const [title, setTitle] = useState("");
@@ -12,6 +13,7 @@ const EditBook = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { id } = useParams();
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     setLoading(true);
@@ -41,12 +43,14 @@ const EditBook = () => {
       .put(`http://localhost:3000/books/${id}`, data)
       .then((response) => {
         setLoading(false);
+        enqueueSnackbar("Book updated successfully", { variant: "success" });
         navigate(`/`);
       })
       .catch((error) => {
-        alert("Error creating book. Check Console for details.");
-        console.error(error);
         setLoading(false);
+        //alert("Error creating book. Check Console for details.");
+        enqueueSnackbar("Error updating book", { variant: "error" });
+        console.error(error);
       });
   };
   return (

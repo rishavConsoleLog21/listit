@@ -3,6 +3,7 @@ import BackButton from "../components/BackButton";
 import Snipper from "../components/Spinner";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useSnackbar } from "notistack";
 
 const CreateBook = () => {
   const [title, setTitle] = useState("");
@@ -10,6 +11,7 @@ const CreateBook = () => {
   const [publishYear, setPublishYear] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleSubmit = () => {
     const data = {
@@ -22,12 +24,14 @@ const CreateBook = () => {
       .post("http://localhost:3000/books", data)
       .then((response) => {
         setLoading(false);
+        enqueueSnackbar("Book created successfully", { variant: "success" });
         navigate(`/`);
       })
       .catch((error) => {
-        alert("Error creating book. Check Console for details.");
-        console.error(error);
         setLoading(false);
+        //alert("Error creating book. Check Console for details.");
+        enqueueSnackbar("Error creating book", { variant: "error" });
+        console.error(error);
       });
   };
   return (
