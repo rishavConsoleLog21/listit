@@ -9,6 +9,17 @@ const app = express();
 // Middleware for parsing request body
 app.use(express.json());
 
+// Middleware for handling CORS
+
+//Option 1 - Allowing all origins with Default of cors(*)
+// app.use(cors());
+
+//Option 2 - Allowing custom origin
+app.use(cors({ origin: "http://localhost:3000",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type"],
+}));
+
 app.get("/", (req, res) => {
   console.log(req);
   return res.status(200).send("Welcome to List Keeper!");
